@@ -6,6 +6,9 @@ from django.utils import timezone
 class Deck(models.Model):
     name = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.name
+
 
 class Tournament(models.Model):
     name = models.CharField(max_length=256)
@@ -33,6 +36,9 @@ class Player(models.Model):
     decks = models.ManyToManyField(Deck, related_name='deck_players', blank=True)
     matches = models.ManyToManyField(Match, related_name='match_players', blank=True)
 
+    def __str__(self):
+        return self.user.username
+
 
 class Bracket(models.Model):
     WINNER = 'w'
@@ -48,3 +54,6 @@ class Bracket(models.Model):
         default=WINNER
     )
     tournament = models.ForeignKey(Tournament)
+
+    def __str__(self):
+        return self.name

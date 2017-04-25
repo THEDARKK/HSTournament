@@ -2,7 +2,6 @@ from django.contrib import admin
 from tournament.models import Deck, Player, Tournament, Bracket, Match
 
 
-# Register your models here.
 @admin.register(Deck)
 class DeckAdmin(admin.ModelAdmin):
     pass
