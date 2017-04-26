@@ -9,6 +9,7 @@ from django.urls import reverse_lazy
 
 from faker import Factory
 from random import choice
+from datetime import datetime
 
 faker = Factory.create()
 
@@ -120,6 +121,7 @@ class TournamentAPITests(APITestCase):
 
         response = self.client.put(reverse_lazy('tournament:tournament-detail-api',
                                                 kwargs={'pk': self.tournament.pk}), data=data)
+        # import ipdb; ipdb.set_trace()
         self.assertEqual(response.status_code, 200)
         self.tournament.refresh_from_db()
         self.assertEqual(self.tournament.name, 'Ahyperawesometournament')
@@ -130,8 +132,8 @@ class TournamentAPITests(APITestCase):
         data = {
             'name': 'Ahyperawesometournament',
             'active': True,
-            'start_time': faker.date(),
-            'end_time': faker.date(),
+            'start_time': datetime.now(),
+            'end_time': datetime.now(),
             'max_players': 100,
         }
 

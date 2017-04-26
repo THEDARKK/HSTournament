@@ -3,6 +3,8 @@ from tournament.models import Deck, Tournament, Match, Player, Bracket
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
+from datetime import datetime
+
 
 class DeckSerializer(serializers.ModelSerializer):
     class Meta:
@@ -13,7 +15,20 @@ class DeckSerializer(serializers.ModelSerializer):
 class TournamentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tournament
-        fields = ('name', 'active', 'max_players')
+        fields = ('name', 'active', 'max_players', 'start_time', 'end_time')
+
+    def to_representation(self, instance):
+        data = super(TournamentSerializer, self).to_representation(instance)
+        start_time = data.get('start_time', None)
+        end_time = data.get('end_time', None)
+        if start_time:
+            start_time = start_time[0:10]
+            data['start_time'] = start_time
+        if end_time:
+            end_time = end_time[0:10]
+            data['end_time'] = end_time
+        # import ipdb; ipdb.set_trace()
+        return data
 
 
 class MatchSerializer(serializers.ModelSerializer):

@@ -4,6 +4,7 @@ from faker import Factory
 from tournament.models import Deck, Tournament, Match, Player, Bracket
 
 from django.contrib.auth.models import User
+from datetime import datetime
 
 faker = Factory.create()
 
@@ -21,8 +22,8 @@ class TournamentFactory(factory.django.DjangoModelFactory):
 
     name = factory.LazyAttribute(lambda _: faker.word())
     active = factory.LazyAttribute(lambda _: faker.boolean())
-    start_time = factory.LazyAttribute(lambda _: faker.date())
-    end_time = factory.LazyAttribute(lambda _: faker.date())
+    start_time = factory.LazyAttribute(lambda _: datetime.now())
+    end_time = factory.LazyAttribute(lambda _: datetime.now())
     max_players = factory.LazyAttribute(lambda _: faker.pyint())
 
 
