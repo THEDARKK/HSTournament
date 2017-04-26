@@ -8,6 +8,7 @@ from tournament.models import Player, Match, Deck, Tournament, Bracket
 from django.urls import reverse_lazy
 
 from faker import Factory
+from random import choice
 
 faker = Factory.create()
 
@@ -195,3 +196,107 @@ class DeckAPITests(APITestCase):
                                                    kwargs={'pk': self.deck.pk}))
         self.assertEqual(response.status_code, 204)
         self.assertEqual(Deck.objects.count(), 1)
+
+
+class MatchAPITests(APITestCase):
+
+    def setUp(self):
+        self.match = MatchFactory()
+        self.tournament = TournamentFactory()
+        self.match2 = MatchFactory(tournament=self.tournament)
+        self.client = APIClient()
+
+    def test_can_get_all_matches(self):
+        response = self.client.get(reverse_lazy('tournament:match-list-api'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_can_get_specific_match(self):
+        response = self.client.get(reverse_lazy('tournament:match-detail-api',
+                                                kwargs={'pk': self.match.pk}))
+        self.assertEqual(response.status_code, 200)
+
+    def test_can_edit_match(self):
+        active_state = self.match.active
+        data = {
+            'active': not self.match.active,
+            'tournament': self.tournament.id
+        }
+
+        response = self.client.put(reverse_lazy('tournament:match-detail-api',
+                                                kwargs={'pk': self.match.pk}), data=data)
+        self.assertEqual(response.status_code, 200)
+        self.match.refresh_from_db()
+        self.assertEqual(self.match.active, not active_state)
+
+    def test_can_post_new_match(self):
+        self.assertEqual(Match.objects.count(), 2)
+        data = {
+            'active': faker.boolean(),
+            'tournament': self.tournament.id
+        }
+
+        response = self.client.post(reverse_lazy('tournament:match-list-api'), data=data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Match.objects.count(), 3)
+
+    def test_can_delete_match(self):
+        self.assertEqual(Match.objects.count(), 2)
+
+        response = self.client.delete(reverse_lazy('tournament:match-detail-api',
+                                                   kwargs={'pk': self.match.pk}))
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(Match.objects.count(), 1)
+
+
+class BracketAPITests(APITestCase):
+
+    def setUp(self):
+        self.bracket = BracketFactory()
+        self.tournament = TournamentFactory()
+        self.bracket2 = BracketFactory(tournament=self.tournament)
+        self.client = APIClient()
+
+    def test_can_get_all_brackets(self):
+        response = self.client.get(reverse_lazy('tournament:bracket-list-api'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.bracket.name)
+        self.assertContains(response, self.bracket2.name)
+
+    def test_can_get_specific_brackets(self):
+        response = self.client.get(reverse_lazy('tournament:bracket-detail-api',
+                                                kwargs={'pk': self.bracket.pk}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.bracket.name)
+        self.assertNotContains(response, self.bracket2.name)
+
+    def test_can_edit_bracket(self):
+        data = {
+            'name': 'bracket_name',
+            'tournament': self.tournament.id,
+            'bracket_type': 'w',
+        }
+
+        response = self.client.put(reverse_lazy('tournament:bracket-detail-api',
+                                                kwargs={'pk': self.bracket.pk}), data=data)
+        self.assertEqual(response.status_code, 200)
+        self.bracket.refresh_from_db()
+        self.assertEqual(self.bracket.name, 'bracket_name')
+
+    def test_can_post_new_bracket(self):
+        self.assertEqual(Bracket.objects.count(), 2)
+        data = {
+            'name': faker.word(),
+            'tournament': self.tournament.id
+        }
+
+        response = self.client.post(reverse_lazy('tournament:bracket-list-api'), data=data)
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(Bracket.objects.count(), 3)
+
+    def test_can_delete_bracket(self):
+        self.assertEqual(Bracket.objects.count(), 2)
+
+        response = self.client.delete(reverse_lazy('tournament:bracket-detail-api',
+                                                   kwargs={'pk': self.bracket.pk}))
+        self.assertEqual(response.status_code, 204)
+        self.assertEqual(Bracket.objects.count(), 1)
