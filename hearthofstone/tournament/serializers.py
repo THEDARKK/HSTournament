@@ -25,7 +25,7 @@ class MatchSerializer(serializers.ModelSerializer):
 class PlayerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
-        fields = ('rank', 'tournaments', 'decks', 'matches')
+        fields = ('rank', 'tournaments', 'decks', 'matches', 'battle_tag')
 
 
 class UserSerializer(serializers.ModelSerializer):
