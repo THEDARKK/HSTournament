@@ -1,65 +1,27 @@
-import { Component } from '@angular/core';
-import { TournamentsService } from '../services/tournaments.service';
+import { Component, OnInit } from '@angular/core';
+
+import { UserService } from '../services/user.service';
+import { User } from '../models/user.model';
 
 @Component({
     moduleId: module.id,
     selector: 'user',
     templateUrl: 'user.component.html',
-    providers: [TournamentsService]
+    providers: [UserService]
 })
 
-export class UserComponent{ 
-    name: string;
-    email: string;
-    address: address;
-    hobbies: string[];
-    showHobbies: boolean;
-    tournaments: Tournament[];
-    
-    constructor(private tournamentsService: TournamentsService){
-        this.name = 'John Doe';
-        this.email = 'john@gmail.com';
-        this.address = {
-            street: '12 Main st',
-            city: 'Boston',
-            state: 'MA'
-        }
-        this.hobbies = ['Music', 'Movies', 'Sports'];
-        this.showHobbies = false;
+export class UserComponent implements OnInit {
+    users: User[];
 
-        this.tournamentsService.getTournaments().subscribe(tournaments => {
-            this.tournaments = tournaments;
-        });
+    constructor(private userService: UserService){}
+
+    getUsers(): void {
+        this.userService
+            .getUsers()
+            .then(users => this.users = users);
     }
 
-    toggleHobbies(){
-        if ( this.showHobbies ){
-            this.showHobbies = false;
-        } else {
-            this.showHobbies = true;
-        }    
+    ngOnInit(): void {
+        this.getUsers();
     }
-
-    addHobby(hobby:string){
-        this.hobbies.push(hobby);
-    }
-
-    deleteHobby(i:number){
-        this.hobbies.splice(i, 1);
-    }
-}
-
-interface address {
-    street: string;
-    city: string;
-    state: string;
-}
-
-interface Tournament {
-    id: number;
-    active: boolean;
-    name: string;
-    max_players: number;
-    start_time: string;
-    end_time: string;
 }

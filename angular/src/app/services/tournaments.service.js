@@ -10,15 +10,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
+var Observable_1 = require("rxjs/Observable");
 require("rxjs/add/operator/toPromise");
 require("rxjs/add/operator/map");
 var TournamentsService = (function () {
     function TournamentsService(http) {
         this.http = http;
+        this.tournamentAPIUrl = 'http://localhost:8000/tournaments/';
     }
     TournamentsService.prototype.getTournaments = function () {
-        return this.http.get('http://localhost:8000/tournaments/')
-            .map(function (res) { return res.json(); });
+        return this.http.get(this.tournamentAPIUrl)
+            .toPromise()
+            .then(function (response) { return response.json(); })
+            .catch(this.handleError);
+    };
+    TournamentsService.prototype.handleError = function (error) {
+        var errMsg;
+        if (error instanceof http_1.Response) {
+            var body = error.json() || '';
+            var err = body.error || JSON.stringify(body);
+            errMsg = error.status + " - " + (error.statusText || '') + " " + err;
+        }
+        else {
+            errMsg = error.message ? error.message : error.toString();
+        }
+        console.error(errMsg);
+        return Observable_1.Observable.throw(errMsg);
     };
     return TournamentsService;
 }());

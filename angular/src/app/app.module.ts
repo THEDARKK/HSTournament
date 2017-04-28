@@ -5,13 +5,20 @@ import { HttpModule } from '@angular/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent }  from './app.component';
-import { UserComponent } from './components/user.component';
+import { TournamentComponent } from './components/tournament.component';
 import { AboutComponent } from './components/about.component';
+import { UserComponent } from './components/user.component';
+import { LoginComponent } from './components/login.component';
+
 import { routing } from './app.routing';
 
 @NgModule({
-  imports:      [ BrowserModule, FormsModule, HttpModule, routing, NgbModule.forRoot() ],
-  declarations: [ AppComponent, UserComponent, AboutComponent ],
-  bootstrap:    [ AppComponent ]
+    imports:      [ BrowserModule, FormsModule, HttpModule, routing, NgbModule.forRoot() ],
+    declarations: [ AppComponent,
+                    TournamentComponent,
+                    AboutComponent,
+                    UserComponent,
+                    LoginComponent],
+    bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

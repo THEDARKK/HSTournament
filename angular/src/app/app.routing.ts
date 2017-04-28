@@ -1,17 +1,31 @@
-import { ModuleWithProviders } from '@angular/core';
+import { ModuleWithProviders }  from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { UserComponent } from './components/user.component';
-import { AboutComponent } from './components/about.component';
+import { TournamentComponent }  from './components/tournament.component';
+import { AboutComponent }       from './components/about.component';
+import { UserComponent }        from './components/user.component';
+import { LoginComponent }       from './components/login.component';
 
 const appRoutes: Routes = [
     {
         path:'',
-        component: UserComponent
+        component: TournamentComponent
     },
     {
         path:'about',
         component: AboutComponent
+    },
+    {
+        path:'users',
+        component: UserComponent
+    },
+    {
+        path:'login',
+        component: LoginComponent
+    },
+    {
+        path:'**',
+        redirectTo: ''
     }
 ]
 

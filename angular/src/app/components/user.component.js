@@ -9,37 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
-var tournaments_service_1 = require("../services/tournaments.service");
+var user_service_1 = require("../services/user.service");
 var UserComponent = (function () {
-    function UserComponent(tournamentsService) {
-        var _this = this;
-        this.tournamentsService = tournamentsService;
-        this.name = 'John Doe';
-        this.email = 'john@gmail.com';
-        this.address = {
-            street: '12 Main st',
-            city: 'Boston',
-            state: 'MA'
-        };
-        this.hobbies = ['Music', 'Movies', 'Sports'];
-        this.showHobbies = false;
-        this.tournamentsService.getTournaments().subscribe(function (tournaments) {
-            _this.tournaments = tournaments;
-        });
+    function UserComponent(userService) {
+        this.userService = userService;
     }
-    UserComponent.prototype.toggleHobbies = function () {
-        if (this.showHobbies) {
-            this.showHobbies = false;
-        }
-        else {
-            this.showHobbies = true;
-        }
+    UserComponent.prototype.getUsers = function () {
+        var _this = this;
+        this.userService
+            .getUsers()
+            .then(function (users) { return _this.users = users; });
     };
-    UserComponent.prototype.addHobby = function (hobby) {
-        this.hobbies.push(hobby);
-    };
-    UserComponent.prototype.deleteHobby = function (i) {
-        this.hobbies.splice(i, 1);
+    UserComponent.prototype.ngOnInit = function () {
+        this.getUsers();
     };
     return UserComponent;
 }());
@@ -48,9 +30,9 @@ UserComponent = __decorate([
         moduleId: module.id,
         selector: 'user',
         templateUrl: 'user.component.html',
-        providers: [tournaments_service_1.TournamentsService]
+        providers: [user_service_1.UserService]
     }),
-    __metadata("design:paramtypes", [tournaments_service_1.TournamentsService])
+    __metadata("design:paramtypes", [user_service_1.UserService])
 ], UserComponent);
 exports.UserComponent = UserComponent;
 //# sourceMappingURL=user.component.js.map
