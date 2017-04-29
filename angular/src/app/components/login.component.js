@@ -26,17 +26,12 @@ var LoginComponent = (function () {
         var _this = this;
         this.loading = true;
         this.loginService.login(this.model.username, this.model.password)
-            .subscribe(function (result) {
-            if (result === true) {
-                // login successful
-                _this.router.navigate(['/']);
-            }
-            else {
-                // login failed
-                _this.error = "Username or password is invalid. Password is case sensitive!";
-                _this.loading = false;
-                _this.router.navigate(['/about']);
-            }
+            .subscribe(function (data) {
+            _this.router.navigate(['/']);
+        }, function (error) {
+            _this.loading = false;
+            _this.error = "Username or password is invalid.";
+            _this.router.navigate(['/login']);
         });
     };
     return LoginComponent;

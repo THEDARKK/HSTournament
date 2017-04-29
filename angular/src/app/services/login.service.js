@@ -10,17 +10,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
+var Observable_1 = require("rxjs/Observable");
 require("rxjs/add/operator/map");
+require("rxjs/add/operator/share");
 var LoginService = (function () {
     function LoginService(http) {
+        var _this = this;
         this.http = http;
         this.authAPIUrl = 'http://localhost:8000/api-token-auth/';
         this.headers = new http_1.Headers({ 'Content-type': 'application/json', 'Accept': 'application/json' });
         this.options = new http_1.RequestOptions({ headers: this.headers });
+        this.status = new Observable_1.Observable(function (observer) {
+            return _this.observer = observer;
+        }).share();
         // set token if saved in local storage
         var currentUser = JSON.parse(localStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
     }
+    LoginService.prototype.changeState = function (newState) {
+        if (this.observer !== undefined) {
+            this.observer.next(newState);
+        }
+    };
     LoginService.prototype.login = function (username, password) {
         var _this = this;
         return this.http.post(this.authAPIUrl, JSON.stringify({ username: username, password: password }), { headers: this.headers })
@@ -28,23 +39,22 @@ var LoginService = (function () {
             // login successful if there's a JWT token in the response
             var token = response.json() && response.json().token;
             if (token) {
+                _this.changeState(true);
                 // set token property
                 _this.token = token;
                 // store username and jwt token in local storage to keep user logged in 
                 // during page refreshes
                 localStorage.setItem('currentUser', JSON.stringify({ username: username, token: token }));
-                // successful login
-                return true;
             }
             else {
-                // not successful
-                return false;
             }
         });
     };
     LoginService.prototype.logout = function () {
+        this.changeState(false);
         this.token = null;
         localStorage.removeItem('currentUser');
+        // window.location.replace('/login');
     };
     return LoginService;
 }());
