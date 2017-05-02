@@ -10,31 +10,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require("@angular/core");
 var router_1 = require("@angular/router");
-var login_service_1 = require("./services/login.service");
-var AppComponent = (function () {
-    function AppComponent(loginService, router) {
-        this.loginService = loginService;
+var AuthGuard = (function () {
+    function AuthGuard(router) {
         this.router = router;
-        this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
     }
-    AppComponent.prototype.ngOnInit = function () {
-        if (!this.currentUser) {
-            this.router.navigate(['/login']);
+    AuthGuard.prototype.canActivate = function () {
+        if (localStorage.getItem('currentUser')) {
+            // logged in so return true
+            return true;
         }
+        this.router.navigate['/login'];
+        return false;
     };
-    AppComponent.prototype.ngOnDestroy = function () {
-    };
-    return AppComponent;
+    return AuthGuard;
 }());
-AppComponent = __decorate([
-    core_1.Component({
-        selector: 'my-app',
-        templateUrl: './app.component.html',
-        styleUrls: ['./app.component.css',],
-        providers: [login_service_1.LoginService,],
-    }),
-    __metadata("design:paramtypes", [login_service_1.LoginService,
-        router_1.Router])
-], AppComponent);
-exports.AppComponent = AppComponent;
-//# sourceMappingURL=app.component.js.map
+AuthGuard = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [router_1.Router])
+], AuthGuard);
+exports.AuthGuard = AuthGuard;
+//# sourceMappingURL=auth.guard.js.map

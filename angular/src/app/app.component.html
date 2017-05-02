@@ -24,8 +24,8 @@
       </form>
       <ul class="nav navbar-nav navbar-right">
         <li><a routerLink="/about">About</a></li>
-        <li *ngIf="!loggedIn"><a routerLink="/login">Login</a></li>
-        <li *ngIf="loggedIn"><a routerLink="/login">Logout</a></li>
+        <li *ngIf="!currentUser"><a [routerLink]="['/login']">Login</a></li>
+        <li *ngIf="currentUser"><a [routerLink]="['/login']">Logout</a></li>
         <li>
              <div class="dropdown">
                  <button class="btn btn-link dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Tutorials
