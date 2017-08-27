@@ -3,8 +3,6 @@ from tournament.models import Deck, Tournament, Match, Player, Bracket
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
-from datetime import datetime
-
 
 class DeckSerializer(serializers.ModelSerializer):
     class Meta:

@@ -2,13 +2,12 @@ from rest_framework.test import APIClient
 from rest_framework.test import APITestCase
 
 from tournament.factories import (PlayerFactory, MatchFactory, DeckFactory,
-                                  TournamentFactory, BracketFactory, UserFactory)
+                                  TournamentFactory, BracketFactory)
 from tournament.models import Player, Match, Deck, Tournament, Bracket
 
 from django.urls import reverse_lazy
 
 from faker import Factory
-from random import choice
 from datetime import datetime
 
 faker = Factory.create()
@@ -22,8 +21,8 @@ class PlayerAPITests(APITestCase):
         self.tournament = TournamentFactory()
         self.match = MatchFactory()
         self.deck = DeckFactory()
-        self.player_m2m= PlayerFactory(tournaments=(self.tournament,), matches=(self.match,),
-                                       decks=(self.deck,), battle_tag='2' + faker.word())
+        self.player_m2m = PlayerFactory(tournaments=(self.tournament,), matches=(self.match,),
+                                        decks=(self.deck,), battle_tag='2' + faker.word())
 
     def test_can_get_all_players(self):
         response = self.client.get(reverse_lazy('tournament:player-list-api'))

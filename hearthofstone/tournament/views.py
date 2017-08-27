@@ -1,11 +1,8 @@
-from django.shortcuts import render
-
 from rest_framework import generics
 
-from tournament.models import Deck, Bracket, Match, Player, Tournament
+from tournament.models import Deck, Bracket, Match, Tournament
 from tournament.serializers import (DeckSerializer, BracketSerializer,
-                                    MatchSerializer, PlayerSerializer,
-                                    TournamentSerializer, UserSerializer)
+                                    MatchSerializer, TournamentSerializer, UserSerializer)
 
 from django.contrib.auth.models import User
 

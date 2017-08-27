@@ -21,7 +21,7 @@ class Tournament(models.Model):
         return self.name
 
     def is_active(self):
-        return active
+        return self.active
 
 
 class Match(models.Model):
