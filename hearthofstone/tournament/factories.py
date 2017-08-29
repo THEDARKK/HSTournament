@@ -14,6 +14,7 @@ class DeckFactory(factory.django.DjangoModelFactory):
         model = Deck
 
     name = factory.LazyAttribute(lambda _: faker.word())
+    link = factory.LazyAttribute(lambda _: faker.url())
 
 
 class TournamentFactory(factory.django.DjangoModelFactory):

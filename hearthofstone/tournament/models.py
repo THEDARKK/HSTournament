@@ -5,6 +5,7 @@ from django.utils import timezone
 
 class Deck(models.Model):
     name = models.CharField(max_length=30)
+    link = models.URLField(blank=True, null=True)
 
     def __str__(self):
         return self.name

@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 class DeckSerializer(serializers.ModelSerializer):
     class Meta:
         model = Deck
-        fields = ('name', )
+        fields = ('name', 'link')
 
 
 class TournamentSerializer(serializers.ModelSerializer):
